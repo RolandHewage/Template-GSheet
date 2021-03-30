@@ -219,8 +219,8 @@ We need to enable the app script trigger if we want to listen to internal change
     (eg: https://ea0834f44458.ngrok.io/onManage)
 5. Obtain GDrive client direct token authentication configurations.
 6. Obtain the Salesforce end point url & Salesforce client direct token authentication configurations.
-6. Once you obtained all configurations, Create `Config.toml` in root directory.
-7. Replace the necessary fields in the `Config.toml` file with your data.
+7. Once you obtained all configurations, Create `Config.toml` in root directory.
+8. Replace the necessary fields in the `Config.toml` file with your data.
 
 ## Config.toml 
 ```

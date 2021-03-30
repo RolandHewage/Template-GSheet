@@ -1,21 +1,21 @@
-# Template: Google sheet row to Github new issue
-When a new row with issue information is appended in Google sheet, create a new Github issue.
+# Template: Google sheet row to Salesforce new record
+When a new row with new Salesforce record information is appended in Google sheet, create a new Salesforce record.
 
 We can make our day-to-day information organized and represented in a generic format with the help of Google Sheets. By 
-using this integration, we can organize and automatically create a new Github issue using the row information in a corresponding Google Sheet which will contain information about Github issues in a specific GitHub repository. We can easily keep track of new issues and interact using Google sheets.
+using this integration, we can organize and automatically create a new Salesforce record using the row information in a corresponding Google Sheet which will contain information about the new Salesforce record. We can easily keep track of new Salesforce records and easily interact using Google sheets.
 
-This template can be used to create a new issue in a Github repository when a new row with the issue information are appended to a Google sheet.
+This template can be used to create a new record in Salesforce when a new row with the record information are appended to a Google sheet.
 
 ## Use this template to
-- Create new issue in a Github repository using the issue information in the corresponding new row of a Google sheet.
+- Create new record in Salesforce using the record information in the corresponding new row of a Google sheet.
 
 ## What you need
-- A GitHub Account
+- A Salesforce Account
 - A Google Cloud Platform Account
 
 ## How to set up
 - Import the template.
-- Allow access to the GitHub account.
+- Allow access to the Salesforce account.
 - Select the repository.
 - Allow access to the Google account.
 - Enable Google App Script Trigger.
@@ -23,7 +23,7 @@ This template can be used to create a new issue in a Github repository when a ne
 
 # Developer Guide
 <p align="center">
-<img src="./docs/images/template_flow.png?raw=true" alt="Github-Google Sheet Integration template overview"/>
+<img src="./docs/images/template_flow.png?raw=true" alt="Salesforce-Google Sheet Integration template overview"/>
 </p>
 
 ## Supported Versions
@@ -41,9 +41,9 @@ This template can be used to create a new issue in a Github repository when a ne
    </td>
   </tr>
   <tr>
-   <td>Salesforce API Version
+   <td>GitHub REST API Version
    </td>
-   <td>V48.0
+   <td>V3
    </td>
   </tr>
   <tr>
@@ -66,10 +66,22 @@ This template can be used to create a new issue in a Github repository when a ne
 * GitHub account
 
 ## Account Configuration
-### Configuration steps for GitHub account
-1. First obtain a [Personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) or [GitHub OAuth App token](https://docs.github.com/en/developers/apps/creating-an-oauth-app).
-2. Next you need to create a Github repository where you want to create new issues from the google spreadsheet.
-3. Add the Github accessToken to the config(Config.toml) file.
+
+### Configuration steps for Salesforce account
+1. Visit [Salesforce](https://www.salesforce.com/) and create a Salesforce Account.
+2. Create a connected app and obtain the following credentials:
+    *   Base URL (Endpoint)
+    *   Access Token
+    *   Client ID
+    *   Client Secret
+    *   Refresh Token
+    *   Refresh Token URL
+3. When you are setting up the connected app, select the following scopes under Selected OAuth Scopes:
+    *   Access and manage your data (api)
+    *   Perform requests on your behalf at any time (refresh_token, offline_access)
+    *   Provide access to your data via the Web (web)
+4. Provide the client ID and client secret to obtain the refresh token and access token. For more information on obtaining OAuth2 credentials, go to [Salesforce documentation](https://help.salesforce.com/articleView?id=remoteaccess_authenticate_overview.htm).
+5. Once you obtained all configurations, Replace "" in the `Conf.toml` file with your data.
 
 ### Configuration steps for Google Drive account
 The Google Spreadsheet Listener Ballerina Module provides the capability to listen the push notifications for changes to the spreadsheet resource through the [Drive API](https://developers.google.com/drive/api/v3/push). The underline google sheets API does not directly support this feature. Whenever a watched spreadsheet resource changes, the Drive API notifies the application and the Google sheet listener gets triggered.
@@ -206,13 +218,18 @@ We need to enable the app script trigger if we want to listen to internal change
     Here the `<BASE_URL>` is the endpoint url where the GSheet listener is running.
     (eg: https://ea0834f44458.ngrok.io/onManage)
 5. Obtain GDrive client direct token authentication configurations.
-6. Obtain the Github PAT or OAuth access token from the Github repository where you want to create new issues.
+6. Obtain the Salesforce end point url & Salesforce client direct token authentication configurations.
 7. Once you obtained all configurations, Create `Config.toml` in root directory.
 8. Replace the necessary fields in the `Config.toml` file with your data.
+9. Customize the service logic based on the record type you are willing to create.
 
 ## Config.toml 
 ```
-github_accessToken = "<GITHUB_PAT_OR_OAUTH_TOKEN>"
+sfdc_epUrl = "<SALESFORCE_ENDPOINT_URL>
+sfdc_clientId = "<SALESFORCE_CLIENT_ID>"
+sfdc_clientSecret = "<SALESFORCE_CLIENT_SECRET>"
+sfdc_refreshToken = "<SALESFORCE_REFRESH_TOKEN>"
+sfdc_refreshUrl = "<SALESFORCE_REFRESH_URL>"
 gsheet_port = "<GSHEET_LISTENER_PORT>"
 gsheet_callbackUrl = "<GSHEET_LISTENER_CALLBACK_URL>"
 drive_clientId = "<GDRIVE_CLIENT_ID>"
@@ -227,9 +244,9 @@ root directory of the integration template.
 `$ bal build`. 
 
 2. Then you can run the integration binary with the following command. 
-`$ bal run /target/bin/gsheet_new_row_to_github_new_issue.jar`. 
+`$ bal run /target/bin/gsheet_new_row_to_sfdc_new_record.jar`. 
 
-3. Now you can add a new row with Github issue information in Google sheets and observe that integration template runtime has received the event 
+3. Now you can add a new row with Salesforce new record information in Google sheets and observe that integration template runtime has received the event 
 notification for new rows.
 
-4. You can check the Github repository to verify that the new issue is created. 
+4. You can check the Salesforce account to verify that the new record is created. 
