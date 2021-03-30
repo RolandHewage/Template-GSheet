@@ -6,19 +6,11 @@ import ballerinax/googleapis_sheets.'listener as sheetsListener;
 
 // Salesforce client configuration parameters
 configurable string ep_url = ?;
-configurable string sf_client_id = ?;
-configurable string sf_client_secret = ?;
-configurable string sf_refresh_token = ?;
-configurable string sf_refresh_url = ?;
+configurable http:OAuth2DirectTokenConfig & readonly sfdcDirectTokenConfig = ?;
 
 sfdc:SalesforceConfiguration sfConfig = {
     baseUrl: ep_url,
-    clientConfig: {
-        clientId: sf_client_id,
-        clientSecret: sf_client_secret,
-        refreshToken: sf_refresh_token,
-        refreshUrl: sf_refresh_url
-    }
+    clientConfig: sfdcDirectTokenConfig
 };
 
 // Initialize the Salesforce Client
