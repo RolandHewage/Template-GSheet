@@ -13,5 +13,10 @@ version = "0.99.7"
 
 [[dependency]]
 org = "ballerinax"
+name = "googleapis_drive"
+version = "0.1.0"
+
+[[dependency]]
+org = "ballerinax"
 name = "github"
 version = "0.99.12"
