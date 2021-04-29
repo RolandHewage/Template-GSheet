@@ -83,26 +83,6 @@ This template can be used to create a new lead in Salesforce when a new row with
 4. Provide the client ID and client secret to obtain the refresh token and access token. For more information on obtaining OAuth2 credentials, go to [Salesforce documentation](https://help.salesforce.com/articleView?id=remoteaccess_authenticate_overview.htm).
 5. Once you obtained all configurations, Replace "" in the `Conf.toml` file with your data.
 
-### Configuration steps for Google Drive account
-The Google Spreadsheet Listener Ballerina Module provides the capability to listen the push notifications for changes to the spreadsheet resource through the [Drive API](https://developers.google.com/drive/api/v3/push). The underline google sheets API does not directly support this feature. Whenever a watched spreadsheet resource changes, the Drive API notifies the application and the Google sheet listener gets triggered.
-
-1. Create a Google account and create a connected app by visiting [Google cloud platform APIs and Services](https://console.cloud.google.com/apis/dashboard). 
-2. Click Library from the left side menu.
-3. In the search bar enter Google Sheets.
-4. Then select Google Drive API and click Enable button.
-5. Complete OAuth Consent Screen setup.
-6. Click Credential tab from left side bar. In the displaying window click Create Credentials button
-Select OAuth client Id.
-7. Fill the required field. Add https://developers.google.com/oauthplayground to the Redirect URI field.
-8. Get clientId and secret. Put it on the config(Config.toml) file.
-9. Visit https://developers.google.com/oauthplayground/ 
-    Go to settings (Top right corner) -> Tick 'Use your own OAuth credentials' and insert Oauth ClientId and secret.Click close.
-10. Then,Complete Step1 (Select and Authotrize API's)
-11. Make sure you select https://www.googleapis.com/auth/drive & https://www.googleapis.com/auth/spreadsheets Oauth scopes.
-12. Click Authorize API's and You will be in Step 2.
-13. Exchange Auth code for tokens.
-14. Copy Access token and Refresh token. Put it on the config(Config.toml) file.
-
 ### Configuration steps for Google Sheets account
 
 We need to enable the app script trigger if we want to listen to internal changes of a spreadsheet. Follow the following steps to enable the trigger.
@@ -113,22 +93,9 @@ We need to enable the app script trigger if we want to listen to internal change
 4. Remove all the code that is currently in the Code.gs file, and replace it with this:
     ```
     function atChange(e){
-        var formData = {
-            'changeType': e.changeType
-        };
-        var payload = JSON.stringify(formData);
-
         if (e.changeType == "REMOVE_ROW") {
             saveDeleteStatus(1);
         }
-
-        var options = {
-            'method' : 'post',
-            'contentType': 'application/json',
-            'payload' : payload
-        };
-
-        UrlFetchApp.fetch('<BASE_URL>/onChange/', options);
     }
 
     function atEdit(e){
@@ -162,7 +129,8 @@ We need to enable the app script trigger if we want to listen to internal change
                 'lastRowWithContent' : range.getSheet().getLastRow(),
                 'lastColumnWithContent' : range.getSheet().getLastColumn(),
                 'previousLastRow' : previousLastRow,
-                'eventType' : eventType
+                'eventType' : eventType,
+                'eventData' : e
         };
         var payload = JSON.stringify(formData);
 
@@ -198,7 +166,7 @@ We need to enable the app script trigger if we want to listen to internal change
     ```
     We’re using the UrlFetchApp class to communicate with other applications on the internet.
 
-5. Replace the <BASE_URL> section with the base URL where your listener service is running. (Note: You can use [ngrok](https://ngrok.com/docs) to expose your web server to the internet. Example: 'https://7745640c2478.ngrok.io/onChange/')
+5. Replace the <BASE_URL> section with the base URL where your listener service is running. (Note: You can use [ngrok](https://ngrok.com/docs) to expose your web server to the internet. Example: 'https://7745640c2478.ngrok.io/onEdit/')
 6. Navigate to the `Triggers` section in the left menu of the editor.
 7. Click `Add Trigger` button.
 8. Then make sure you 'Choose which function to run' is `atChange` then 'Select event source' is `From spreadsheet` then 'Select event type' is  `On change` then click Save!.
@@ -210,14 +178,14 @@ We need to enable the app script trigger if we want to listen to internal change
 1. Create new spreadsheet.
 2. Enable the App Script trigger.
 3. Setup the GSheet listener service port.
-4. Setup the GSheet callback URL in the following format 
+4. Setup the GSheet callback URL of the App Script in the following format 
 
     ```
-    <BASE_URL>/onManage
+    <BASE_URL>/onEdit
     ``` 
     Here the `<BASE_URL>` is the endpoint url where the GSheet listener is running.
-    (eg: https://ea0834f44458.ngrok.io/onManage)
-5. Obtain GDrive client direct token authentication configurations.
+    (eg: https://ea0834f44458.ngrok.io/onEdit)
+5. Setup the GSheet spreadsheetId.
 6. Obtain the Salesforce end point url & Salesforce client direct token authentication configurations.
 7. Once you obtained all configurations, Create `Config.toml` in root directory.
 8. Replace the necessary fields in the `Config.toml` file with your data.
@@ -230,11 +198,7 @@ sfdc_clientSecret = "<SALESFORCE_CLIENT_SECRET>"
 sfdc_refreshToken = "<SALESFORCE_REFRESH_TOKEN>"
 sfdc_refreshUrl = "<SALESFORCE_REFRESH_URL>"
 gsheet_port = "<GSHEET_LISTENER_PORT>"
-gsheet_callbackUrl = "<GSHEET_LISTENER_CALLBACK_URL>"
-drive_clientId = "<GDRIVE_CLIENT_ID>"
-drive_clientSecret = "<GDRIVE_CLIENT_SECRET>"
-drive_refreshToken = "<GDRIVE_REFRESH_TOKEN>"
-drive_refreshUrl = "<GDRIVE_REFRESH_URL>"
+gsheet_spreadsheetId = "<GSHEET_SPREADSHEET_ID>"
 ```
 
 ## Running the Template
