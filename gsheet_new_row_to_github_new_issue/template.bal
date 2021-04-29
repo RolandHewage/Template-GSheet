@@ -42,12 +42,22 @@ service / on gSheetListener {
             string commaSeparatedLabelList = newValues[0][4].toString();
             string[] labelList = regex:split(commaSeparatedLabelList, ",");
             foreach var label in labelList {
-                issueLabelList.push(label.trim());
+                var labelIdResponse = githubClient->getRepositoryLabel(repositoryOwner, repositoryName, label.trim());
+                if (labelIdResponse is github:Label) {
+                    issueLabelList.push(labelIdResponse.id);
+                } else {
+                    log:printError("Error: " + labelIdResponse.toString());
+                }         
             }
             string commaSeparatedAssigneeList = newValues[0][5].toString();
             string[] assigneeList = regex:split(commaSeparatedAssigneeList, ",");
             foreach var assignee in assigneeList {
-                issueAssigneeList.push(assignee.trim());
+                var assigneeIdResponse = githubClient->getUserId(assignee.trim());
+                if (assigneeIdResponse is string) {
+                    issueAssigneeList.push(assigneeIdResponse);
+                } else {
+                    log:printError("Error: " + assigneeIdResponse.toString());
+                }           
             }
             github:CreateIssueInput createIssueInput = {
                 title: newValues[0][2].toString(),
@@ -56,7 +66,6 @@ service / on gSheetListener {
                 assigneeIds: issueAssigneeList
             };
             log:printInfo("GithubClient -> createIssue()");
-            log:printInfo(createIssueInput.toString());
             var createdIssue = githubClient->createIssue(createIssueInput, repositoryOwner, repositoryName);
             if (createdIssue is github:Issue) {
                 log:printInfo("Created Issue: " + createdIssue.toString());
