@@ -1,0 +1,16 @@
+{
+    "TRIGGER_TYPE": "webhook",
+    "PORT": "8090",
+    "EP_URL": "SalesforceAccountDomainURL",
+    "SFDC_CLIENT_ID": "SalesforceClientId",
+    "SFDC_CLIENT_SECRET": "SalesforceClientSecret",
+    "SFDC_REFRESH_TOKEN": "SalesforceRefreshToken",
+    "SFDC_REFRESH_URL": "SalesforceRefreshURL",
+    "SFDC_OBJECT": "SalesforceObject",
+    "SHEETS_CLIENT_ID": "GoogleSheetClientId",
+    "SHEETS_CLIENT_SECRET": "GoogleSheetClientSecret",
+    "SHEETS_REFRESH_TOKEN": "GoogleSheetRefreshToken",
+    "SHEETS_REFRESH_URL": "GoogleSheetRefreshURL",
+    "SHEETS_SPREADSHEET_ID": "GoogleSheetSpreadsheetID",
+    "SHEETS_WORKSHEET_NAME": "GoogleSheetWorksheetName"
+}

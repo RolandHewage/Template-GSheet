@@ -31,7 +31,7 @@ This template can be used to create a new record in Salesforce when a new row wi
   <tr>
    <td>Ballerina Language Version
    </td>
-   <td>Swan Lake Alpha2
+   <td>Swan Lake Alpha5
    </td>
   </tr>
   <tr>
@@ -41,9 +41,9 @@ This template can be used to create a new record in Salesforce when a new row wi
    </td>
   </tr>
   <tr>
-   <td>GitHub REST API Version
+   <td>Salesforce API 
    </td>
-   <td>V3
+   <td>v48.0
    </td>
   </tr>
   <tr>
@@ -52,18 +52,12 @@ This template can be used to create a new record in Salesforce when a new row wi
    <td>V4
    </td>
   </tr>
-  <tr>
-   <td>Google Drive API Version
-   </td>
-   <td>V3
-   </td>
-  </tr>
 </table>
 
 ## Pre-requisites
 * Download and install [Ballerina](https://ballerinalang.org/downloads/).
 * Google Cloud Platform account
-* GitHub account
+* Salesforce account
 
 ## Account Configuration
 
@@ -83,7 +77,27 @@ This template can be used to create a new record in Salesforce when a new row wi
 4. Provide the client ID and client secret to obtain the refresh token and access token. For more information on obtaining OAuth2 credentials, go to [Salesforce documentation](https://help.salesforce.com/articleView?id=remoteaccess_authenticate_overview.htm).
 5. Once you obtained all configurations, Replace "" in the `Conf.toml` file with your data.
 
-### Configuration steps for Google Sheets account
+### Configuration steps for Google sheets account
+
+1. Create a Google account and create a connected app by visiting [Google cloud platform APIs and Services](https://console.cloud.google.com/apis/dashboard). 
+2. Click `Library` from the left side menu.
+3. In the search bar enter Google Sheets.
+4. Then select Google Sheets API and click `Enable` button.
+5. Complete OAuth Consent Screen setup.
+6. Click `Credential` tab from left side bar. In the displaying window click `Create Credentials` button
+Select OAuth client Id.
+7. Fill the required field. Add https://developers.google.com/oauthplayground to the Redirect URI field.
+8. Get clientId and secret. Put it on the config(Config.toml) file.
+9. Visit https://developers.google.com/oauthplayground/ 
+    Go to settings (Top right corner) -> Tick 'Use your own OAuth credentials' and insert Oauth ClientId and secret.Click close.
+10. Then,Complete Step1 (Select and Authotrize API's)
+11. Make sure you select https://www.googleapis.com/auth/drive & https://www.googleapis.com/auth/spreadsheets Oauth scopes.
+12. Click `Authorize API's` and You will be in Step 2.
+13. Exchange Auth code for tokens.
+14. Copy `Access token` and `Refresh token`. Put it on the config(`Config.toml`) file.
+15. Obtain the relevant refresh URLs for each API and include them in the `Config.toml` file.
+
+### Configuration steps for Google App Script Trigger
 
 We need to enable the app script trigger if we want to listen to internal changes of a spreadsheet. Follow the following steps to enable the trigger.
 
@@ -189,17 +203,28 @@ We need to enable the app script trigger if we want to listen to internal change
 6. Obtain the Salesforce end point url & Salesforce client direct token authentication configurations.
 7. Once you obtained all configurations, Create `Config.toml` in root directory.
 8. Replace the necessary fields in the `Config.toml` file with your data.
-9. Customize the service logic based on the record type you are willing to create.
+9. Customize the service logic based on the record type (sfdcObject) you are willing to create.
 
 ## Config.toml 
 ```
-sfdc_epUrl = "<SALESFORCE_ENDPOINT_URL>
-sfdc_clientId = "<SALESFORCE_CLIENT_ID>"
-sfdc_clientSecret = "<SALESFORCE_CLIENT_SECRET>"
-sfdc_refreshToken = "<SALESFORCE_REFRESH_TOKEN>"
-sfdc_refreshUrl = "<SALESFORCE_REFRESH_URL>"
-gsheet_port = "<GSHEET_LISTENER_PORT>"
-gsheet_spreadsheetId = "<GSHEET_SPREADSHEET_ID>"
+[<ORG_NAME>.gsheet_new_row_to_sfdc_new_record]
+port = <GSHEET_PORT>
+epURL = "<SALESFORCE_BASE_URL>"
+sfdcObject = "<SALESFORCE_OBJECT>"
+spreadsheetId = "<GSHEET_SPREADSHEET_ID>"
+workSheetName = "<GSHEET_WORKSHEET_NAME>"
+
+[<ORG_NAME>.gsheet_new_row_to_sfdc_new_record.sheetsOAuthConfig]
+clientId = "<GSHEET_CLIENT_ID>"
+clientSecret = "<GSHEET_CLIENT_SECRET>"
+refreshUrl = "<GSHEET_REFRESH_URL>"
+refreshToken = "<GSHEET_REFRESH_TOKEN>"
+
+[<ORG_NAME>.gsheet_new_row_to_sfdc_new_record.sfdcOAuthConfig]
+clientId = "<SALESFORCE_CLIENT_ID>"
+clientSecret = "<SALESFORCE_CLIENT_SECRET>"
+refreshUrl = "<SALESFORCE_REFRESH_URL>"
+refreshToken = "<SALESFORCE_REFRESH_TOKEN>"
 ```
 
 ## Running the Template
