@@ -1,0 +1,7 @@
+{
+    "TRIGGER_TYPE": "webhook",
+    "PORT": "8090",
+    "GITHUB_ACCESS_TOKEN": "GithubAccessToken",
+    "SHEETS_SPREADSHEET_ID": "GoogleSheetSpreadsheetID",
+    "SHEETS_WORKSHEET_NAME": "GoogleSheetWorksheetName"
+}

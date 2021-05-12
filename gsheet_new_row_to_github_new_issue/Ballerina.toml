@@ -1,17 +1,17 @@
 [package]
-org = "roland"
+org = "ballerinax"
 name = "gsheet_new_row_to_github_new_issue"
-version = "0.1.1"
+version = "0.1.0"
 
 [build-options]
 observabilityIncluded = true
 
 [[dependency]]
 org = "ballerinax"
-name = "googleapis_sheets"
-version = "0.99.7"
+name = "googleapis.sheets"
+version = "0.99.8"
 
 [[dependency]]
 org = "ballerinax"
 name = "github"
-version = "0.99.13"
+version = "0.99.14"

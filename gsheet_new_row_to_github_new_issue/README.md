@@ -31,7 +31,7 @@ This template can be used to create a new issue in a Github repository when a ne
   <tr>
    <td>Ballerina Language Version
    </td>
-   <td>Swan Lake Alpha2
+   <td>Swan Lake Alpha5
    </td>
   </tr>
   <tr>
@@ -40,20 +40,13 @@ This template can be used to create a new issue in a Github repository when a ne
    <td>11
    </td>
   </tr>
-  <tr>
-   <td>Salesforce API Version
-   </td>
-   <td>V48.0
-   </td>
-  </tr>
-  <tr>
    <td>Google Sheets API Version
    </td>
    <td>V4
    </td>
   </tr>
   <tr>
-   <td>Google Drive API Version
+   <td>GitHub REST API Version
    </td>
    <td>V3
    </td>
@@ -70,26 +63,6 @@ This template can be used to create a new issue in a Github repository when a ne
 1. First obtain a [Personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) or [GitHub OAuth App token](https://docs.github.com/en/developers/apps/creating-an-oauth-app).
 2. Next you need to create a Github repository where you want to create new issues from the google spreadsheet.
 3. Add the Github accessToken to the config(Config.toml) file.
-
-### Configuration steps for Google Drive account
-The Google Spreadsheet Listener Ballerina Module provides the capability to listen the push notifications for changes to the spreadsheet resource through the [Drive API](https://developers.google.com/drive/api/v3/push). The underline google sheets API does not directly support this feature. Whenever a watched spreadsheet resource changes, the Drive API notifies the application and the Google sheet listener gets triggered.
-
-1. Create a Google account and create a connected app by visiting [Google cloud platform APIs and Services](https://console.cloud.google.com/apis/dashboard). 
-2. Click Library from the left side menu.
-3. In the search bar enter Google Sheets.
-4. Then select Google Drive API and click Enable button.
-5. Complete OAuth Consent Screen setup.
-6. Click Credential tab from left side bar. In the displaying window click Create Credentials button
-Select OAuth client Id.
-7. Fill the required field. Add https://developers.google.com/oauthplayground to the Redirect URI field.
-8. Get clientId and secret. Put it on the config(Config.toml) file.
-9. Visit https://developers.google.com/oauthplayground/ 
-    Go to settings (Top right corner) -> Tick 'Use your own OAuth credentials' and insert Oauth ClientId and secret.Click close.
-10. Then,Complete Step1 (Select and Authotrize API's)
-11. Make sure you select https://www.googleapis.com/auth/drive & https://www.googleapis.com/auth/spreadsheets Oauth scopes.
-12. Click Authorize API's and You will be in Step 2.
-13. Exchange Auth code for tokens.
-14. Copy Access token and Refresh token. Put it on the config(Config.toml) file.
 
 ### Configuration steps for Google Sheets account
 
@@ -183,7 +156,7 @@ We need to enable the app script trigger if we want to listen to internal change
 11. Your triggers will now work as you expect, if you go edit any cell and as soon as you leave that cell this trigger will run and it will hit your endpoint with the data!
 
 ## Template Configuration
-1. Create new spreadsheet.
+1. Create new spreadsheet. (With the ordered columns `Repository Owner`, `Repository Name`, `Issue Title`, `Issue Content`, `Issue Label List`, `Issue Assignee List` as headings. List should be provided as comma separated values)
 2. Enable the App Script trigger.
 3. Setup the GSheet listener service port.
 4. Setup the GSheet callback URL of the App Script in the following format 
@@ -194,15 +167,18 @@ We need to enable the app script trigger if we want to listen to internal change
     Here the `<BASE_URL>` is the endpoint url where the GSheet listener is running.
     (eg: https://ea0834f44458.ngrok.io/onEdit)
 5. Setup the GSheet spreadsheetId.
-6. Obtain the Github PAT or OAuth access token from the Github repository where you want to create new issues.
-7. Once you obtained all configurations, Create `Config.toml` in root directory.
-8. Replace the necessary fields in the `Config.toml` file with your data.
+6. Setup the GSheet worksheetName.
+7. Obtain the Github PAT or OAuth access token from the Github repository where you want to create new issues.
+8. Once you obtained all configurations, Create `Config.toml` in root directory.
+9. Replace the necessary fields in the `Config.toml` file with your data.
 
 ## Config.toml 
 ```
-github_accessToken = "<GITHUB_PAT_OR_OAUTH_TOKEN>"
-gsheet_port = "<GSHEET_LISTENER_PORT>"
-gsheet_spreadsheetId = "<GSHEET_SPREADSHEET_ID>"
+[<ORG_NAME>.gsheet_new_row_to_github_new_issue]
+githubAccessToken = "<GITHUB_PAT_OR_OAUTH_TOKEN>"
+port = <GSHEET_PORT>
+spreadsheetId = "<GSHEET_SPREADSHEET_ID>"
+workSheetName = "<GSHEET_WORKSHEET_NAME>"
 ```
 
 ## Running the Template
